@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model boleta {
+  id         Int    @id(map: "PK_boleta")
+  url_boleta Bytes  @db.VarBinary(255)
+  ventas     ventas @relation(fields: [id], references: [id], onUpdate: NoAction, map: "FK_boleta_ventas+")
+}
+
+model categorias {
+  id        Int         @id(map: "PK_categorias") @default(autoincrement())
+  nombre    String      @db.VarChar(100)
+  estado_id String      @db.VarChar(50)
+  estado    estado      @relation(fields: [estado_id], references: [id], map: "FK_categorias_estado")
+  productos productos[]
+}
+
+model estado {
+  id         String       @id(map: "PK_estado") @db.VarChar(50)
+  activo     Boolean
+  categorias categorias[]
+  productos  productos[]
+}
+
+model productos {
+  id             String           @id(map: "PK_productos") @db.VarChar(50)
+  nombre         String           @db.VarChar(255)
+  precio         Decimal          @db.Decimal(18, 2)
+  exsistencias   Int
+  estado_id      String           @db.VarChar(50)
+  categoria_id   Int
+  categorias     categorias       @relation(fields: [categoria_id], references: [id], onUpdate: NoAction, map: "FK_productos_categorias")
+  estado         estado           @relation(fields: [estado_id], references: [id], onUpdate: NoAction, map: "FK_productos_estado")
+  ventas_detalle ventas_detalle[]
+}
+
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B61A66DA974") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+model usuarios {
+  id             Int      @id(map: "PK_usuarios") @default(autoincrement())
+  nombre_usuario String   @db.VarChar(50)
+  correo         String   @db.VarChar(255)
+  contrasena     String   @db.VarChar(255)
+  ventas         ventas[]
+}
+
+model ventas {
+  id             Int            @id(map: "PK_ventas+") @default(autoincrement())
+  cliente        Bytes          @db.VarBinary(255)
+  dni            String         @db.NVarChar(8)
+  fecha          DateTime       @db.DateTime
+  usuario_id     Int
+  boleta         boleta?
+  usuarios       usuarios       @relation(fields: [usuario_id], references: [id], map: "FK_ventas+_usuarios")
+  ventas_detalle ventas_detalle @relation(fields: [id], references: [id], onUpdate: NoAction, map: "FK_ventas+_ventas_detalle")
+}
+
+model ventas_detalle {
+  id          Int       @id(map: "PK_ventas_detalle") @default(autoincrement())
+  producto_id String    @db.VarChar(50)
+  venta_id    Int
+  cantidad    Int
+  ventas      ventas?
+  productos   productos @relation(fields: [producto_id], references: [id], map: "FK_ventas_detalle_productos1")
+}
