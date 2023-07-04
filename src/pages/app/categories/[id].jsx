@@ -25,7 +25,12 @@ const EditCategoryPage = ({ category }) => {
     handleSubmit,
     formState: { errors }
   } = useForm({
-    defaultValues: category,
+    defaultValues: {
+      ...category,
+      estado: {
+        activo: category.estado.activo.toString()
+      }
+    },
     resolver: zodResolver(updateCategorySchema)
   })
   const { isInvalidNombre, isInvalidActivo } = useMemo(
@@ -104,7 +109,7 @@ const EditCategoryPage = ({ category }) => {
               name="estado.activo"
               control={control}
               render={({ field: { value, ...rest } }) => (
-                <RadioGroup value={value.toString()} {...rest}>
+                <RadioGroup value={value} {...rest}>
                   <Stack direction="row">
                     <Radio value="false">No Activo</Radio>
                     <Radio value="true">Activo</Radio>
