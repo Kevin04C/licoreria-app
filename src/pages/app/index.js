@@ -1,15 +1,15 @@
-import { Box, Button, Heading } from '@chakra-ui/react'
-import { getSession, signOut, useSession } from 'next-auth/react'
+import { DashBoardLayout } from '@/layout'
+import { Heading } from '@chakra-ui/react'
+import { getSession, useSession } from 'next-auth/react'
 import React from 'react'
 
 const HomePage = () => {
   const { data } = useSession()
   return (
-    <Box>
+    <DashBoardLayout>
       <Heading>Home Page</Heading>
       <pre>{ JSON.stringify(data, null, 3)}</pre>
-      <Button onClick={() => signOut()}>Logout</Button>
-    </Box>
+    </DashBoardLayout>
   )
 }
 
