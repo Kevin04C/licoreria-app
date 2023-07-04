@@ -16,13 +16,13 @@ model boleta {
 model categorias {
   id        Int         @id(map: "PK_categorias") @default(autoincrement())
   nombre    String      @db.VarChar(100)
-  estado_id String      @db.VarChar(50)
+  estado_id Int
   estado    estado      @relation(fields: [estado_id], references: [id], map: "FK_categorias_estado")
   productos productos[]
 }
 
 model estado {
-  id         String       @id(map: "PK_estado") @db.VarChar(50)
+  id         Int          @id(map: "PK_estado") @default(autoincrement())
   activo     Boolean
   categorias categorias[]
   productos  productos[]
@@ -33,7 +33,7 @@ model productos {
   nombre         String           @db.VarChar(255)
   precio         Decimal          @db.Decimal(18, 2)
   exsistencias   Int
-  estado_id      String           @db.VarChar(50)
+  estado_id      Int
   categoria_id   Int
   categorias     categorias       @relation(fields: [categoria_id], references: [id], onUpdate: NoAction, map: "FK_productos_categorias")
   estado         estado           @relation(fields: [estado_id], references: [id], onUpdate: NoAction, map: "FK_productos_estado")
@@ -52,8 +52,8 @@ model sysdiagrams {
 
 model usuarios {
   id             Int      @id(map: "PK_usuarios") @default(autoincrement())
-  nombre_usuario String   @db.VarChar(50)
-  correo         String   @db.VarChar(255)
+  nombre_usuario String   @unique(map: "IX_usuarios_1") @db.VarChar(50)
+  correo         String   @unique(map: "IX_usuarios") @db.VarChar(255)
   contrasena     String   @db.VarChar(255)
   ventas         ventas[]
 }
