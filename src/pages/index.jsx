@@ -14,7 +14,7 @@ import {
 import { useForm, Controller } from 'react-hook-form'
 import { FaUserAlt, FaLock } from 'react-icons/fa'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { loginSchema } from '@/validations'
+import { loginSchema } from '@/validations/app/auth'
 import { useMemo } from 'react'
 import { getSession, signIn } from 'next-auth/react'
 
