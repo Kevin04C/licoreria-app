@@ -17,6 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { loginSchema } from '@/validations/app/auth'
 import { useMemo } from 'react'
 import { getSession, signIn } from 'next-auth/react'
+import { ErrorCredentialsAuth } from '@/components/auth'
 
 export default function Home () {
   const {
@@ -28,11 +29,21 @@ export default function Home () {
   })
 
   const onSubmit = async (data) => {
-    await signIn('credentials', { username: data.username, password: data.password, callbackUrl: '/app' })
+    await signIn('credentials', {
+      username: data.username,
+      password: data.password,
+      callbackUrl: '/app'
+    })
   }
 
-  const isInvalidUsername = useMemo(() => errors.username?.message !== undefined, [errors.username])
-  const isInvalidPassword = useMemo(() => errors.password?.message !== undefined, [errors.password])
+  const isInvalidUsername = useMemo(
+    () => errors.username?.message !== undefined,
+    [errors.username]
+  )
+  const isInvalidPassword = useMemo(
+    () => errors.password?.message !== undefined,
+    [errors.password]
+  )
 
   return (
     <>
@@ -99,9 +110,12 @@ export default function Home () {
                       </InputGroup>
                     )}
                   />
-                  <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+                  <FormErrorMessage>
+                    {errors.password?.message}
+                  </FormErrorMessage>
                 </FormControl>
-                <Button type="submit" w="full" colorScheme="facebook">
+                <ErrorCredentialsAuth />
+                <Button type="submit" w="full" colorScheme="facebook" mt={5}>
                   INICIAR SESIÓN
                 </Button>
               </form>
@@ -125,6 +139,6 @@ export const getServerSideProps = async ({ req, query }) => {
     }
   }
   return {
-    props: { }
+    props: {}
   }
 }
