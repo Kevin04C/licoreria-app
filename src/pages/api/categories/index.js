@@ -40,16 +40,17 @@ const getCategories = async (req, res) => {
     console.log(error)
     res.status(400).json({ message: 'Error al obtener las categorias' })
   } finally {
-    prisma.$disconnect()
+    await prisma.$disconnect()
   }
 }
 
 export const createCategory = async (req, res) => {
   const response = newCategorySchema.safeParse(req.body)
   if (!response.success) {
-    const { errors } = response.error
+    const { issues } = response.error
     return res.status(400).json({
-      error: { message: 'Invalid request', errors }
+      message: 'Datos inválidi',
+      errors: issues
     })
   }
 
@@ -87,6 +88,6 @@ export const createCategory = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error al crear la categoria' })
   } finally {
-    prisma.$disconnect()
+    await prisma.$disconnect()
   }
 }
