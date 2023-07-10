@@ -1,0 +1,19 @@
+.container_pagination {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  list-style: none;
+  color: #1a202c
+}
+.page_item {
+  padding: 4px 8px
+}
+.page_item--active {
+  background-color: #1e355b;
+  border-radius: 4px;
+  color: #fff;
+}
+.page_link {
+  padding: 4px;
+  font-weight: 600;
+}
