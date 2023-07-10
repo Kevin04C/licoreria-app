@@ -1,6 +1,6 @@
 import { Flex, Icon, Link, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 export const NavItem = ({ children, icon, href = '#', ...rest }) => {
   const router = useRouter()
@@ -45,7 +45,7 @@ export const NavItem = ({ children, icon, href = '#', ...rest }) => {
           />
         )}
         <Text>
-         {children}
+            {children}
         </Text>
       </Flex>
     </Link>

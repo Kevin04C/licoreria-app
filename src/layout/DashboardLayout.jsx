@@ -10,7 +10,7 @@ export const DashBoardLayout = ({ children }) => {
       </Head>
       <Box minH="100vh" bg="gray.50">
         <SidebarContent />
-        <Box ml={60} p="4">
+        <Box ml="260px" p="4">
           {children}
         </Box>
       </Box>
