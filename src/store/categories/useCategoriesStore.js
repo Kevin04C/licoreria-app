@@ -45,7 +45,7 @@ export const useCategoriesStore = create(
       }
     },
     updateCategory: async (category) => {
-      set(() => ({ updatingCategory: true }))
+      set(() => ({ updatingCategory: true, errorCategoryUpdate: null }))
       const { id, nombre, activo } = updateCategoryAdapter(category)
       try {
         const { data: category } = await licoreriaApi.put(`/categories/${id}`, {
@@ -60,11 +60,8 @@ export const useCategoriesStore = create(
         }))
         setTimeout(() => set(() => ({ categoryUpdated: false })), 50)
       } catch (error) {
-        const { data } = error
-        set(() => ({ errorCategoryUpdate: 'Error al actualizar' }))
-        setTimeout(() => {
-          set(() => ({ errorCategoryUpdate: null }))
-        }, 50)
+        const { message } = error?.response?.data
+        set(() => ({ errorCategoryUpdate: message }))
       } finally {
         set(() => ({ updatingCategory: false }))
       }
